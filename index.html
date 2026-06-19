@@ -118,62 +118,142 @@
 
     <script>
         // =========================================================================
-        // 1. CONFIGURATION: MASTER QUESTION BANK
+        // 1. CONFIGURATION: MASTER QUESTION BANK (30 P1, 10 P2, 30 P3)
         // =========================================================================
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyavwfWzr_1r4fnBHZKTWXIASN94dwLVbP1O8TdBPcGuysVU1TeO2bHGeYYmYA0Ve05/exec"; 
         
         const part1Pool = [
+            // Accommodation & Hometown (1-6)
             { id: "P1_Acc_1", part: "Part 1: Accommodation", text: "Do you live in a house or an apartment?" },
             { id: "P1_Acc_2", part: "Part 1: Accommodation", text: "What do you like most about your home?" },
             { id: "P1_Acc_3", part: "Part 1: Accommodation", text: "Is there anything you would like to change about your room?" },
-            { id: "P1_Rout_1", part: "Part 1: Daily Routine", text: "What is your typical daily routine like?" },
-            { id: "P1_Rout_2", part: "Part 1: Daily Routine", text: "What part of your day do you enjoy the most?" },
-            { id: "P1_Rout_3", part: "Part 1: Daily Routine", text: "Do you prefer having a set routine or being spontaneous?" },
-            { id: "P1_Trav_1", part: "Part 1: Travel & Transport", text: "Do you enjoy traveling to new places?" },
-            { id: "P1_Trav_2", part: "Part 1: Travel & Transport", text: "What forms of transport do you usually prefer when traveling?" },
-            { id: "P1_Trav_3", part: "Part 1: Travel & Transport", text: "Do you prefer traveling alone or with your family?" },
             { id: "P1_Home_1", part: "Part 1: Hometown", text: "Where is your hometown located?" },
             { id: "P1_Home_2", part: "Part 1: Hometown", text: "What do people in your hometown do for leisure?" },
             { id: "P1_Home_3", part: "Part 1: Hometown", text: "Has your hometown changed much since you were a child?" },
+            
+            // Daily Routine & Leisure (7-12)
+            { id: "P1_Rout_1", part: "Part 1: Daily Routine", text: "What is your typical daily routine like?" },
+            { id: "P1_Rout_2", part: "Part 1: Daily Routine", text: "What part of your day do you enjoy the most?" },
+            { id: "P1_Rout_3", part: "Part 1: Daily Routine", text: "Do you prefer having a set routine or being spontaneous?" },
+            { id: "P1_Leis_1", part: "Part 1: Leisure & Hobbies", text: "What do you usually do in your spare time?" },
+            { id: "P1_Leis_2", part: "Part 1: Leisure & Hobbies", text: "Did you have different hobbies when you were a child?" },
+            { id: "P1_Leis_3", part: "Part 1: Leisure & Hobbies", text: "Is it important to have a hobby that is physically active?" },
+
+            // Travel & Transport (13-18)
+            { id: "P1_Trav_1", part: "Part 1: Travel", text: "Do you enjoy traveling to new places?" },
+            { id: "P1_Trav_2", part: "Part 1: Travel", text: "What forms of transport do you usually prefer when traveling?" },
+            { id: "P1_Trav_3", part: "Part 1: Travel", text: "Do you prefer traveling alone or with your family?" },
+            { id: "P1_Trans_1", part: "Part 1: Public Transport", text: "Is public transport reliable where you live?" },
+            { id: "P1_Trans_2", part: "Part 1: Public Transport", text: "How do you usually commute to work or school?" },
+            { id: "P1_Trans_3", part: "Part 1: Public Transport", text: "Do you think traffic conditions in your city are improving?" },
+
+            // Studies, Work & Technology (19-24)
             { id: "P1_Stud_1", part: "Part 1: Studies & Work", text: "Do you work, or are you currently studying?" },
             { id: "P1_Stud_2", part: "Part 1: Studies & Work", text: "Why did you choose this specific subject or profession?" },
+            { id: "P1_Tech_1", part: "Part 1: Technology", text: "What kind of technological items do you use most often?" },
+            { id: "P1_Tech_2", part: "Part 1: Technology", text: "Do you think modern devices save people time or waste it?" },
+            { id: "P1_Tech_3", part: "Part 1: Technology", text: "How often do you use the internet for your assignments or tasks?" },
+            { id: "P1_Social_1", part: "Part 1: Social Media", text: "Do you spend a lot of time on social media networks?" },
+
+            // Weather, Books & Culture (25-30)
             { id: "P1_Weat_1", part: "Part 1: Weather", text: "What kind of weather do you like best?" },
-            { id: "P1_Weat_2", part: "Part 1: Weather", text: "Does the weather ever affect your mood?" }
+            { id: "P1_Weat_2", part: "Part 1: Weather", text: "Does the weather ever affect your mood?" },
+            { id: "P1_Book_1", part: "Part 1: Books & Reading", text: "Do you enjoy reading books in your free time?" },
+            { id: "P1_Book_2", part: "Part 1: Books & Reading", text: "What was your favorite book when you were growing up?" },
+            { id: "P1_Music_1", part: "Part 1: Music", text: "What genre of music do you listen to when you want to relax?" },
+            { id: "P1_Music_2", part: "Part 1: Music", text: "Did you learn to play any musical instruments as a child?" }
         ];
 
+        // 10 Themes: Each with 1 Part 2 and 3 dynamic Part 3 questions (Mapping to exactly 10 P2 and 30 P3)
         const part2And3Pool = [
             {
                 topic: "Influence",
-                part2: { 
-                    id: "P2_Model", 
-                    part: "Part 2: Individual Long Turn", 
-                    text: "Describe a person who has influenced you in a positive way.\n\nYou should say:\n• Who this person is\n• How you know this person\n• What influence they have had on you\n\n...and explain why this person has been important in your life." 
-                },
+                part2: { id: "P2_Theme1", part: "Part 2: Individual Long Turn", text: "Describe a person who has influenced you in a positive way.\n\nYou should say:\n• Who this person is\n• How you know this person\n• What influence they have had on you\n\n...and explain why this person has been important in your life." },
                 part3: [
-                    { id: "P3_Model_1", part: "Part 3: Role Models", text: "What qualities make someone a good role model?" },
-                    { id: "P3_Model_2", part: "Part 3: Role Models", text: "Do young people today have different role models compared to the past?" },
-                    { id: "P3_Model_3", part: "Part 3: Role Models", text: "Should parents be the main role models for their children?" },
-                    { id: "P3_Model_4", part: "Part 3: Role Models", text: "How do celebrities influence public behavior in today's society?" },
-                    { id: "P3_Model_5", part: "Part 3: Role Models", text: "Do you think teachers have a greater influence on kids than public figures?" },
-                    { id: "P3_Model_6", part: "Part 3: Role Models", text: "Can negative examples in media sometimes teach positive lessons?" },
-                    { id: "P3_Model_7", part: "Part 3: Role Models", text: "What social responsibilities do public icons bear toward younger generations?" }
+                    { id: "P3_T1_1", part: "Part 3: Role Models", text: "What qualities make someone a good role model?" },
+                    { id: "P3_T1_2", part: "Part 3: Role Models", text: "Do young people today have different role models compared to the past?" },
+                    { id: "P3_T1_3", part: "Part 3: Role Models", text: "Should parents be the main role models for their children?" }
                 ]
             },
             {
                 topic: "Journeys",
-                part2: {
-                    id: "P2_Journey",
-                    part: "Part 2: Individual Long Turn",
-                    text: "Describe a memorable journey or trip you took that took longer than expected.\n\nYou should say:\n• Where you went\n• What form of transport you used\n• Why it took so long\n\n...and explain how you felt about the experience overall."
-                },
+                part2: { id: "P2_Theme2", part: "Part 2: Individual Long Turn", text: "Describe a memorable journey or trip you took that took longer than expected.\n\nYou should say:\n• Where you went\n• What form of transport you used\n• Why it took so long\n\n...and explain how you felt about the experience overall." },
                 part3: [
-                    { id: "P3_Journey_1", part: "Part 3: Travel Patterns", text: "Why do you think people choose to travel to remote tourist attractions?" },
-                    { id: "P3_Journey_2", part: "Part 3: Travel Patterns", text: "What are the advantages of using private vehicles compared to public transport?" },
-                    { id: "P3_Journey_3", part: "Part 3: Travel Patterns", text: "Do you believe traveling to foreign countries helps people broaden their perspectives?" },
-                    { id: "P3_Journey_4", part: "Part 3: Travel Patterns", text: "How has technology changed the way people plan their travel today?" },
-                    { id: "P3_Journey_5", part: "Part 3: Travel Patterns", text: "Do you think eco-tourism will become more popular in the future?" },
-                    { id: "P3_Journey_6", part: "Part 3: Travel Patterns", text: "What kinds of problems do people usually face when traveling to a new city?" },
-                    { id: "P3_Journey_7", part: "Part 3: Travel Patterns", text: "Should governments spend more money on improving public transport networks?" }
+                    { id: "P3_Theme2_1", part: "Part 3: Travel Patterns", text: "Why do you think people choose to travel to remote tourist attractions?" },
+                    { id: "P3_Theme2_2", part: "Part 3: Travel Patterns", text: "What are the advantages of using private vehicles compared to public transport?" },
+                    { id: "P3_Theme2_3", part: "Part 3: Travel Patterns", text: "Do you believe traveling to foreign countries helps people broaden their perspectives?" }
+                ]
+            },
+            {
+                topic: "Skills",
+                part2: { id: "P2_Theme3", part: "Part 2: Individual Long Turn", text: "Describe a useful practical skill you have learned recently.\n\nYou should say:\n• What the skill is\n• How or where you learned it\n• Why you decided to learn it\n\n...and explain how this skill helps you in your everyday life." },
+                part3: [
+                    { id: "P3_Theme3_1", part: "Part 3: Practical Learning", text: "What kinds of practical skills should children be taught at school?" },
+                    { id: "P3_Theme3_2", part: "Part 3: Practical Learning", text: "Do you think age impacts a person's ability to pick up entirely new skills?" },
+                    { id: "P3_Theme3_3", part: "Part 3: Practical Learning", text: "How has the internet changed the way people develop professional skills?" }
+                ]
+            },
+            {
+                topic: "Environmental Place",
+                part2: { id: "P2_Theme4", part: "Part 2: Individual Long Turn", text: "Describe a beautiful place in nature that you have visited.\n\nYou should say:\n• Where it is located\n• When you went there\n• What you did while you were there\n\n...and explain why you find this place particularly beautiful." },
+                part3: [
+                    { id: "P3_Theme4_1", part: "Part 3: Environment & Tourism", text: "Why is it important to protect natural beauty spots from excessive development?" },
+                    { id: "P3_Theme4_2", part: "Part 3: Environment & Tourism", text: "What measures can individuals take to minimize pollution when visiting nature parks?" },
+                    { id: "P3_Theme4_3", part: "Part 3: Environment & Tourism", text: "Do you think urban green areas like city parks can substitute for actual wildlife spots?" }
+                ]
+            },
+            {
+                topic: "An Event",
+                part2: { id: "P2_Theme5", part: "Part 2: Individual Long Turn", text: "Describe an important celebrations or traditional festival from your culture.\n\nYou should say:\n• What event it is\n• How people celebrate it\n• What specific clothes or foods are involved\n\n...and explain why this celebration is significant to you." },
+                part3: [
+                    { id: "P3_Theme5_1", part: "Part 3: Culture & Traditions", text: "Are traditional festivals losing importance among younger generations?" },
+                    { id: "P3_Theme5_2", part: "Part 3: Culture & Traditions", text: "How does commercialization alter the original values of cultural celebrations?" },
+                    { id: "P3_Theme5_3", part: "Part 3: Culture & Traditions", text: "Should countries actively promote their native festivals to global tourists?" }
+                ]
+            },
+            {
+                topic: "An Object",
+                part2: { id: "P2_Theme6", part: "Part 2: Individual Long Turn", text: "Describe a piece of electronic equipment that is indispensable to your life.\n\nYou should say:\n• What device it is\n• How long you have owned it\n• What operations you perform with it\n\n...and explain why this item is so essential to your routine." },
+                part3: [
+                    { id: "P3_Theme6_1", part: "Part 3: Consumerism & Tech", text: "Has society become overly dependent on digital devices for daily survival?" },
+                    { id: "P3_Theme6_2", part: "Part 3: Consumerism & Tech", text: "What problems do older generations face when managing modern automated tech?" },
+                    { id: "P3_Theme6_3", part: "Part 3: Consumerism & Tech", text: "Do you believe electronics are built to become obsolete faster nowadays?" }
+                ]
+            },
+            {
+                topic: "A Building",
+                part2: { id: "P2_Theme7", part: "Part 2: Individual Long Turn", text: "Describe an interesting or historical building in your hometown.\n\nYou should say:\n• Where it is located\n• What it looks like architecture-wise\n• What it is used for today\n\n...and explain why this building holds community significance." },
+                part3: [
+                    { id: "P3_Theme7_1", part: "Part 3: Urban Architecture", text: "Should historical architecture be preserved even if it hinders modern urban zoning?" },
+                    { id: "P3_Theme7_2", part: "Part 3: Urban Architecture", text: "How does a building's visual look affect the psychological mood of an office worker?" },
+                    { id: "P3_Theme7_3", part: "Part 3: Urban Architecture", text: "Is it more beneficial to construct taller apartment complexes or short suburban houses?" }
+                ]
+            },
+            {
+                topic: "A Piece of Good News",
+                part2: { id: "P2_Theme8", part: "Part 2: Individual Long Turn", text: "Describe a time when you received exceptionally good news.\n\nYou should say:\n• What the news was about\n• Who delivered this message to you\n• How long you had waited for it\n\n...and explain why this news made you feel so happy." },
+                part3: [
+                    { id: "P3_Theme8_1", part: "Part 3: Media & News Networks", text: "Why do mainstream media channels focus more on negative stories than positive ones?" },
+                    { id: "P3_Theme8_2", part: "Part 3: Media & News Networks", text: "How has internet speed altered the way communities share sensitive global news?" },
+                    { id: "P3_Theme8_3", part: "Part 3: Media & News Networks", text: "Is it better to deliver bad news face-to-face or via messaging channels?" }
+                ]
+            },
+            {
+                topic: "A Book or Film",
+                part2: { id: "P2_Theme9", part: "Part 2: Individual Long Turn", text: "Describe an educational book or movie that left a deep impact on you.\n\nYou should say:\n• What the title is\n• What the central storyline explores\n• When you first read or watched it\n\n...and explain what important lessons you took from it." },
+                part3: [
+                    { id: "P3_Theme9_1", part: "Part 3: Media Consumption", text: "Do cinema adaptations usually degrade or improve the artistic value of a book?" },
+                    { id: "P3_Theme9_2", part: "Part 3: Media Consumption", text: "Should historical films prioritize realistic facts over cinematic entertainment?" },
+                    { id: "P3_Theme9_3", part: "Part 3: Media Consumption", text: "How does excessive screen time influence reading comprehension capacities in children?" }
+                ]
+            },
+            {
+                topic: "An Advertisement",
+                part2: { id: "P2_Theme10", part: "Part 2: Individual Long Turn", text: "Describe an advertisement or commercial campaign that you remember clearly.\n\nYou should say:\n• What product or service it promoted\n• Where you saw or heard it\n• What visuals or audio components were present\n\n...and explain why you found this commercial so memorable." },
+                part3: [
+                    { id: "P3_Theme10_1", part: "Part 3: Marketing & Psychology", text: "What subtle psychological triggers do companies use to convince buyers?" },
+                    { id: "P3_Theme10_2", part: "Part 3: Marketing & Psychology", text: "Should governments introduce stricter regulations against targeting children with ads?" },
+                    { id: "P3_Theme10_3", part: "Part 3: Marketing & Psychology", text: "To what extent does social media celebrity endorsement impact buying behaviors?" }
                 ]
             }
         ];
@@ -187,14 +267,26 @@
 
         function buildDynamicExam() {
             examData = [];
+            // Step A: Pick 10 random questions out of the 30 available in Part 1 Pool
             const selectedPart1 = getRandomElements(part1Pool, 10);
             examData.push(...selectedPart1);
 
+            // Step B: Pick 1 random theme out of the 10 structural Part 2 options
             const randomTheme = part2And3Pool[Math.floor(Math.random() * part2And3Pool.length)];
             examData.push(randomTheme.part2);
 
-            const selectedPart3 = getRandomElements(randomTheme.part3, 6);
-            examData.push(...selectedPart3);
+            // Step C: Push all 3 corresponding analytical Part 3 questions related to that exact chosen theme
+            examData.push(...randomTheme.part3);
+            
+            // Step D: To ensure a comprehensive evaluation flow, choose 3 additional random Part 3 questions from other alternative themes to total exactly 6 Part 3 questions.
+            let alternativePart3s = [];
+            part2And3Pool.forEach(theme => {
+                if(theme.topic !== randomTheme.topic) {
+                    alternativePart3s.push(...theme.part3);
+                }
+            });
+            const secondaryPart3 = getRandomElements(alternativePart3s, 3);
+            examData.push(...secondaryPart3);
         }
 
         // =========================================================================
@@ -416,7 +508,6 @@
                         audioData: base64Data
                     };
 
-                    // FIX: Set Content-Type header to text/plain to avoid triggering CORS preflight status 405 error
                     await fetch(WEB_APP_URL, {
                         method: "POST",
                         mode: "no-cors", 
