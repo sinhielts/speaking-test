@@ -120,7 +120,7 @@
         // =========================================================================
         // 1. CONFIGURATION: MASTER QUESTION BANK
         // =========================================================================
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzreJkZZcpLfaTNu39nBlOjGBNK47QdkUyQKs_ICsfMN14mMc0T5fQ8WbAvEEsfCuzz/exec"; 
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyavwfWzr_1r4fnBHZKTWXIASN94dwLVbP1O8TdBPcGuysVU1TeO2bHGeYYmYA0Ve05/exec"; 
         
         const part1Pool = [
             { id: "P1_Acc_1", part: "Part 1: Accommodation", text: "Do you live in a house or an apartment?" },
@@ -269,13 +269,11 @@
                 
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
                 
-                // Unified standard stop recording workflow
                 mediaRecorder.onstop = () => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                     recordedAnswers[examData[currentIdx].id] = audioBlob;
                     enableNextButton();
                     
-                    // Release the pending promise blocker if it exists
                     if (window.resolveRecordStop) {
                         window.resolveRecordStop();
                         window.resolveRecordStop = null;
@@ -364,7 +362,6 @@
             }
         });
 
-        // Crucial fix: Wraps mediaRecorder.stop inside a synchronous layout monitor promise wrapper
         function forceStopAndUpload() {
             return new Promise((resolve) => {
                 if (mediaRecorder && mediaRecorder.state === "recording") {
@@ -419,10 +416,11 @@
                         audioData: base64Data
                     };
 
+                    // FIX: Set Content-Type header to text/plain to avoid triggering CORS preflight status 405 error
                     await fetch(WEB_APP_URL, {
                         method: "POST",
                         mode: "no-cors", 
-                        headers: { "Content-Type": "application/json" },
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
                         body: JSON.stringify(payload)
                     });
                 }
