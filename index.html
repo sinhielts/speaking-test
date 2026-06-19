@@ -33,7 +33,7 @@
             
             <div class="space-y-2">
                 <h2 class="text-2xl font-bold text-gray-800">IELTS Speaking Component</h2>
-                <p class="text-gray-500 max-w-md mx-auto text-sm">Please fill in your contact information below to register and launch the test engine. A unique set of random questions will be drawn for you.</p>
+                <p class="text-gray-500 max-w-md mx-auto text-sm">Please fill in your contact information below to register and launch the test engine. The system will dynamically generate a full 17-question evaluation exam.</p>
             </div>
             
             <div class="max-w-md mx-auto text-left space-y-4">
@@ -118,90 +118,64 @@
 
     <script>
         // =========================================================================
-        // 1. CONFIGURATION: EXTENDED MASTER QUESTION BANK
+        // 1. CONFIGURATION: EXPANDED MASTER QUESTION BANK (17 TOTAL SELECTIONS)
         // =========================================================================
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzreJkZZcpLfaTNu39nBlOjGBNK47QdkUyQKs_ICsfMN14mMc0T5fQ8WbAvEEsfCuzz/exec"; 
+        const WEB_APP_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"; 
         
-        // Extended Part 1 Categories Pool (Draws 3 random questions completely)
+        // Large Part 1 Pool (10 will be chosen randomly)
         const part1Pool = [
-            // Accommodation
             { id: "P1_Acc_1", part: "Part 1: Accommodation", text: "Do you live in a house or an apartment?" },
             { id: "P1_Acc_2", part: "Part 1: Accommodation", text: "What do you like most about your home?" },
             { id: "P1_Acc_3", part: "Part 1: Accommodation", text: "Is there anything you would like to change about your room?" },
-            // Daily Routine
             { id: "P1_Rout_1", part: "Part 1: Daily Routine", text: "What is your typical daily routine like?" },
             { id: "P1_Rout_2", part: "Part 1: Daily Routine", text: "What part of your day do you enjoy the most?" },
             { id: "P1_Rout_3", part: "Part 1: Daily Routine", text: "Do you prefer having a set routine or being spontaneous?" },
-            // Travel
-            { id: "P1_Trav_1", part: "Part 1: Travel", text: "Do you enjoy traveling to new places?" },
-            { id: "P1_Trav_2", part: "Part 1: Travel", text: "What forms of transport do you usually prefer when exploring a new city?" },
-            { id: "P1_Trav_3", part: "Part 1: Travel", text: "Do you prefer traveling alone or with your family?" },
-            // Hometown
+            { id: "P1_Trav_1", part: "Part 1: Travel & Transport", text: "Do you enjoy traveling to new places?" },
+            { id: "P1_Trav_2", part: "Part 1: Travel & Transport", text: "What forms of transport do you usually prefer when traveling?" },
+            { id: "P1_Trav_3", part: "Part 1: Travel & Transport", text: "Do you prefer traveling alone or with your family?" },
             { id: "P1_Home_1", part: "Part 1: Hometown", text: "Where is your hometown located?" },
             { id: "P1_Home_2", part: "Part 1: Hometown", text: "What do people in your hometown do for leisure?" },
             { id: "P1_Home_3", part: "Part 1: Hometown", text: "Has your hometown changed much since you were a child?" },
-            // Studies / Work
             { id: "P1_Stud_1", part: "Part 1: Studies & Work", text: "Do you work, or are you currently studying?" },
             { id: "P1_Stud_2", part: "Part 1: Studies & Work", text: "Why did you choose this specific subject or profession?" },
-            // Weather
             { id: "P1_Weat_1", part: "Part 1: Weather", text: "What kind of weather do you like best?" },
             { id: "P1_Weat_2", part: "Part 1: Weather", text: "Does the weather ever affect your mood?" }
         ];
 
-        // Extended Part 2 and Part 3 Topic Theme Pools
+        // Thematic Themes (1 Part 2 Cue card + 6 related Part 3 questions drawn)
         const part2And3Pool = [
             {
-                topic: "RoleModel",
+                topic: "Influence",
                 part2: { 
                     id: "P2_Model", 
                     part: "Part 2: Individual Long Turn", 
                     text: "Describe a person who has influenced you in a positive way.\n\nYou should say:\n• Who this person is\n• How you know this person\n• What influence they have had on you\n\n...and explain why this person has been important in your life." 
                 },
                 part3: [
-                    { id: "P3_Model_1", part: "Part 3: Influence and Role Models", text: "What qualities make someone a good role model?" },
-                    { id: "P3_Model_2", part: "Part 3: Influence and Role Models", text: "Do young people today have different role models compared to the past?" },
-                    { id: "P3_Model_3", part: "Part 3: Influence and Role Models", text: "Should parents be the main role models for their children?" },
-                    { id: "P3_Model_4", part: "Part 3: Influence and Role Models", text: "How do celebrities influence public behavior in today's society?" }
+                    { id: "P3_Model_1", part: "Part 3: Role Models", text: "What qualities make someone a good role model?" },
+                    { id: "P3_Model_2", part: "Part 3: Role Models", text: "Do young people today have different role models compared to the past?" },
+                    { id: "P3_Model_3", part: "Part 3: Role Models", text: "Should parents be the main role models for their children?" },
+                    { id: "P3_Model_4", part: "Part 3: Role Models", text: "How do celebrities influence public behavior in today's society?" },
+                    { id: "P3_Model_5", part: "Part 3: Role Models", text: "Do you think teachers have a greater influence on kids than public figures?" },
+                    { id: "P3_Model_6", part: "Part 3: Role Models", text: "Can negative examples in media sometimes teach positive lessons?" },
+                    { id: "P3_Model_7", part: "Part 3: Role Models", text: "What social responsibilities do public icons bear toward younger generations?" }
                 ]
             },
             {
-                topic: "Journey",
+                topic: "Journeys",
                 part2: {
                     id: "P2_Journey",
                     part: "Part 2: Individual Long Turn",
                     text: "Describe a memorable journey or trip you took that took longer than expected.\n\nYou should say:\n• Where you went\n• What form of transport you used\n• Why it took so long\n\n...and explain how you felt about the experience overall."
                 },
                 part3: [
-                    { id: "P3_Journey_1", part: "Part 3: Travel & Infrastructure", text: "Why do you think people choose to travel to remote tourist attractions?" },
-                    { id: "P3_Journey_2", part: "Part 3: Travel & Infrastructure", text: "What are the advantages of using private vehicles compared to public transport?" },
-                    { id: "P3_Journey_3", part: "Part 3: Travel & Infrastructure", text: "Do you believe traveling to foreign countries helps people broaden their perspectives?" },
-                    { id: "P3_Journey_4", part: "Part 3: Travel & Infrastructure", text: "How has technology changed the way people plan their vacations today?" }
-                ]
-            },
-            {
-                topic: "Technology",
-                part2: {
-                    id: "P2_Tech",
-                    part: "Part 2: Individual Long Turn",
-                    text: "Describe a piece of technology you own that you find exceptionally useful.\n\nYou should say:\n• What it is\n• What you use it for\n• How long you have owned it\n\n...and explain why this item is so essential to your daily lifestyle."
-                },
-                part3: [
-                    { id: "P3_Tech_1", part: "Part 3: Technology & Society", text: "Do you think modern technology has made people more isolated or more connected?" },
-                    { id: "P3_Tech_2", part: "Part 3: Technology & Society", text: "Should schools rely more heavily on electronic devices for teaching students?" },
-                    { id: "P3_Tech_3", part: "Part 3: Technology & Society", text: "How might the workspace shift over the next decade due to automation?" }
-                ]
-            },
-            {
-                topic: "Book",
-                part2: {
-                    id: "P2_Book",
-                    part: "Part 2: Individual Long Turn",
-                    text: "Describe an interesting book you read recently that made you think deeply.\n\nYou should say:\n• What the book was\n• What it was about\n• Why you chose to read it\n\n...and explain what important message you took away from reading it."
-                },
-                part3: [
-                    { id: "P3_Book_1", part: "Part 3: Literature & Culture", text: "Do you think physical paper books will eventually be completely replaced by e-books?" },
-                    { id: "P3_Book_2", part: "Part 3: Literature & Culture", text: "Why is it important for parents to read stories aloud to young children?" },
-                    { id: "P3_Book_3", part: "Part 3: Literature & Culture", text: "Should school systems encourage reading for entertainment rather than strictly for testing?" }
+                    { id: "P3_Journey_1", part: "Part 3: Travel Patterns", text: "Why do you think people choose to travel to remote tourist attractions?" },
+                    { id: "P3_Journey_2", part: "Part 3: Travel Patterns", text: "What are the advantages of using private vehicles compared to public transport?" },
+                    { id: "P3_Journey_3", part: "Part 3: Travel Patterns", text: "Do you believe traveling to foreign countries helps people broaden their perspectives?" },
+                    { id: "P3_Journey_4", part: "Part 3: Travel Patterns", text: "How has technology changed the way people plan their travel today?" },
+                    { id: "P3_Journey_5", part: "Part 3: Travel Patterns", text: "Do you think eco-tourism will become more popular in the future?" },
+                    { id: "P3_Journey_6", part: "Part 3: Travel Patterns", text: "What kinds of problems do people usually face when traveling to a new city?" },
+                    { id: "P3_Journey_7", part: "Part 3: Travel Patterns", text: "Should governments spend more money on improving public transport networks?" }
                 ]
             }
         ];
@@ -213,19 +187,20 @@
             return shuffled.slice(0, num);
         }
 
+        // Main Engine Assembler
         function buildDynamicExam() {
             examData = [];
 
-            // 1. Draw 3 random Part 1 Questions
-            const selectedPart1 = getRandomElements(part1Pool, 3);
+            // 1. Draw exactly 10 questions for Part 1
+            const selectedPart1 = getRandomElements(part1Pool, 10);
             examData.push(...selectedPart1);
 
-            // 2. Draw 1 random Part 2 Topic Block
+            // 2. Draw exactly 1 question for Part 2
             const randomTheme = part2And3Pool[Math.floor(Math.random() * part2And3Pool.length)];
             examData.push(randomTheme.part2);
 
-            // 3. Draw 3 random Part 3 Questions matching that Part 2 theme
-            const selectedPart3 = getRandomElements(randomTheme.part3, 3);
+            // 3. Draw exactly 6 questions for Part 3
+            const selectedPart3 = getRandomElements(randomTheme.part3, 6);
             examData.push(...selectedPart3);
         }
 
@@ -307,6 +282,7 @@
                     enableNextButton();
                 };
 
+                // Compile the exact 10-1-6 layout sequence dynamically
                 buildDynamicExam();
 
                 setupScreen.classList.add('hidden');
