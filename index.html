@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Exam Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="bg-blue-600 text-white shadow-md p-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" alt="SINH IELTS Logo" class="h-12 w-12 rounded-lg bg-white p-0.5 object-contain">
+                <h1 class="text-xl font-bold tracking-wide hidden sm:block">Official IELTS Speaking Simulation</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div id="global-clock-container" class="hidden bg-blue-800 px-3 py-1 rounded-full text-sm font-mono font-bold flex items-center space-x-1.5 text-yellow-300 animate-pulse">
+                    <span>⏱️ Total Time Left:</span>
+                    <span id="global-timer">15:00</span>
+                </div>
+                <span id="progress-text" class="text-sm bg-blue-700 px-3 py-1 rounded-full font-medium">Registration</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl w-full mx-auto p-6 flex-grow flex flex-col justify-center">
+        
+        <div id="setup-screen" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center space-y-6">
+            <div class="flex justify-center mb-2">
+                <img src="logo.png" alt="SINH IELTS Logo" class="h-24 w-24 object-contain">
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-gray-800">IELTS Speaking Component</h2>
+                <p class="text-gray-500 max-w-md mx-auto text-sm">Please fill in your contact information below to register and launch the test engine. A unique set of random questions will be drawn for you.</p>
+            </div>
+            
+            <div class="max-w-md mx-auto text-left space-y-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-600 block mb-1">Full Name:</label>
+                    <input type="text" id="student-name" placeholder="e.g. John Doe" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600 block mb-1">Email Address:</label>
+                    <input type="email" id="student-email" placeholder="e.g. john@example.com" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600 block mb-1">Phone Number:</label>
+                    <input type="tel" id="student-phone" placeholder="e.g. +1234567890" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            
+            <button id="btn-start-test" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl shadow-sm transition-all inline-flex items-center space-x-2 mt-4">
+                <span>Authorize Mic & Start Test</span>
+            </button>
+        </div>
+
+        <div id="test-screen" class="hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-8">
+            
+            <div class="space-y-4 text-center border-b border-gray-100 pb-6">
+                <div>
+                    <span id="part-tag" class="text-xs uppercase tracking-widest font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Part Loading</span>
+                </div>
+                
+                <div id="prompt-container" class="min-h-[100px] flex items-center justify-center px-4 text-left md:text-center">
+                    <h3 id="question-text" class="text-xl md:text-2xl font-medium text-gray-800 max-w-xl mx-auto leading-relaxed">Loading examiner question...</h3>
+                </div>
+
+                <button id="btn-replay" class="text-sm text-blue-500 hover:text-blue-600 inline-flex items-center space-x-1 focus:outline-none transition-colors">
+                    <span>🔊 Replay Examiner Audio</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <div id="recording-status" class="text-sm font-medium text-gray-500 flex items-center space-x-2">
+                    <span id="status-dot" class="w-2.5 h-2.5 bg-gray-400 rounded-full"></span>
+                    <span id="status-text">System Initialization</span>
+                </div>
+                
+                <div class="relative flex items-center justify-center">
+                    <button id="btn-record" class="bg-gray-800 hover:bg-black text-white w-20 h-20 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-105 focus:outline-none z-10">
+                        <svg id="icon-mic" class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                        <svg id="icon-stop" class="w-8 h-8 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011 1v2a1 1 0 01-1 1H9a1 1 0 01-1-1v-2a1 1 0 011-1h2z"></path></svg>
+                    </button>
+                    <div id="pulse-ring" class="absolute w-20 h-20 bg-red-400 rounded-full opacity-50 animate-ping hidden"></div>
+                </div>
+
+                <div id="timer-display" class="text-2xl font-mono font-semibold text-gray-700 hidden">00:00</div>
+            </div>
+
+            <div class="flex justify-between items-center border-t border-gray-100 pt-6">
+                <button id="btn-force-quit" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 font-semibold px-4 py-2.5 rounded-xl transition-all inline-flex items-center space-x-2 text-sm">
+                    🛑 Stop & Save Exam Now
+                </button>
+                <button id="btn-next" disabled class="bg-gray-200 text-gray-400 font-semibold px-6 py-2.5 rounded-xl cursor-not-allowed transition-all inline-flex items-center space-x-2">
+                    <span id="btn-next-text">Next Question</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="end-screen" class="hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center space-y-6">
+            <div id="sync-loading" class="space-y-4">
+                <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <h2 class="text-2xl font-bold text-gray-800">Finalizing Exam Upload...</h2>
+                <p class="text-gray-500 text-sm">Syncing digital audio logs directly to your instructor's processing vault.</p>
+            </div>
+            
+            <div id="sync-success" class="hidden space-y-4">
+                <div class="inline-flex bg-green-50 text-green-500 p-4 rounded-full w-16 h-16 mx-auto">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Evaluation Finished!</h2>
+                <p id="end-screen-message" class="text-gray-600 max-w-sm mx-auto">Your speaking exam has been completed and cataloged in Google Drive successfully.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // =========================================================================
+        // 1. CONFIGURATION: EXTENDED MASTER QUESTION BANK
+        // =========================================================================
+        const WEB_APP_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"; 
+        
+        // Extended Part 1 Categories Pool (Draws 3 random questions completely)
+        const part1Pool = [
+            // Accommodation
+            { id: "P1_Acc_1", part: "Part 1: Accommodation", text: "Do you live in a house or an apartment?" },
+            { id: "P1_Acc_2", part: "Part 1: Accommodation", text: "What do you like most about your home?" },
+            { id: "P1_Acc_3", part: "Part 1: Accommodation", text: "Is there anything you would like to change about your room?" },
+            // Daily Routine
+            { id: "P1_Rout_1", part: "Part 1: Daily Routine", text: "What is your typical daily routine like?" },
+            { id: "P1_Rout_2", part: "Part 1: Daily Routine", text: "What part of your day do you enjoy the most?" },
+            { id: "P1_Rout_3", part: "Part 1: Daily Routine", text: "Do you prefer having a set routine or being spontaneous?" },
+            // Travel
+            { id: "P1_Trav_1", part: "Part 1: Travel", text: "Do you enjoy traveling to new places?" },
+            { id: "P1_Trav_2", part: "Part 1: Travel", text: "What forms of transport do you usually prefer when exploring a new city?" },
+            { id: "P1_Trav_3", part: "Part 1: Travel", text: "Do you prefer traveling alone or with your family?" },
+            // Hometown
+            { id: "P1_Home_1", part: "Part 1: Hometown", text: "Where is your hometown located?" },
+            { id: "P1_Home_2", part: "Part 1: Hometown", text: "What do people in your hometown do for leisure?" },
+            { id: "P1_Home_3", part: "Part 1: Hometown", text: "Has your hometown changed much since you were a child?" },
+            // Studies / Work
+            { id: "P1_Stud_1", part: "Part 1: Studies & Work", text: "Do you work, or are you currently studying?" },
+            { id: "P1_Stud_2", part: "Part 1: Studies & Work", text: "Why did you choose this specific subject or profession?" },
+            // Weather
+            { id: "P1_Weat_1", part: "Part 1: Weather", text: "What kind of weather do you like best?" },
+            { id: "P1_Weat_2", part: "Part 1: Weather", text: "Does the weather ever affect your mood?" }
+        ];
+
+        // Extended Part 2 and Part 3 Topic Theme Pools
+        const part2And3Pool = [
+            {
+                topic: "RoleModel",
+                part2: { 
+                    id: "P2_Model", 
+                    part: "Part 2: Individual Long Turn", 
+                    text: "Describe a person who has influenced you in a positive way.\n\nYou should say:\n• Who this person is\n• How you know this person\n• What influence they have had on you\n\n...and explain why this person has been important in your life." 
+                },
+                part3: [
+                    { id: "P3_Model_1", part: "Part 3: Influence and Role Models", text: "What qualities make someone a good role model?" },
+                    { id: "P3_Model_2", part: "Part 3: Influence and Role Models", text: "Do young people today have different role models compared to the past?" },
+                    { id: "P3_Model_3", part: "Part 3: Influence and Role Models", text: "Should parents be the main role models for their children?" },
+                    { id: "P3_Model_4", part: "Part 3: Influence and Role Models", text: "How do celebrities influence public behavior in today's society?" }
+                ]
+            },
+            {
+                topic: "Journey",
+                part2: {
+                    id: "P2_Journey",
+                    part: "Part 2: Individual Long Turn",
+                    text: "Describe a memorable journey or trip you took that took longer than expected.\n\nYou should say:\n• Where you went\n• What form of transport you used\n• Why it took so long\n\n...and explain how you felt about the experience overall."
+                },
+                part3: [
+                    { id: "P3_Journey_1", part: "Part 3: Travel & Infrastructure", text: "Why do you think people choose to travel to remote tourist attractions?" },
+                    { id: "P3_Journey_2", part: "Part 3: Travel & Infrastructure", text: "What are the advantages of using private vehicles compared to public transport?" },
+                    { id: "P3_Journey_3", part: "Part 3: Travel & Infrastructure", text: "Do you believe traveling to foreign countries helps people broaden their perspectives?" },
+                    { id: "P3_Journey_4", part: "Part 3: Travel & Infrastructure", text: "How has technology changed the way people plan their vacations today?" }
+                ]
+            },
+            {
+                topic: "Technology",
+                part2: {
+                    id: "P2_Tech",
+                    part: "Part 2: Individual Long Turn",
+                    text: "Describe a piece of technology you own that you find exceptionally useful.\n\nYou should say:\n• What it is\n• What you use it for\n• How long you have owned it\n\n...and explain why this item is so essential to your daily lifestyle."
+                },
+                part3: [
+                    { id: "P3_Tech_1", part: "Part 3: Technology & Society", text: "Do you think modern technology has made people more isolated or more connected?" },
+                    { id: "P3_Tech_2", part: "Part 3: Technology & Society", text: "Should schools rely more heavily on electronic devices for teaching students?" },
+                    { id: "P3_Tech_3", part: "Part 3: Technology & Society", text: "How might the workspace shift over the next decade due to automation?" }
+                ]
+            },
+            {
+                topic: "Book",
+                part2: {
+                    id: "P2_Book",
+                    part: "Part 2: Individual Long Turn",
+                    text: "Describe an interesting book you read recently that made you think deeply.\n\nYou should say:\n• What the book was\n• What it was about\n• Why you chose to read it\n\n...and explain what important message you took away from reading it."
+                },
+                part3: [
+                    { id: "P3_Book_1", part: "Part 3: Literature & Culture", text: "Do you think physical paper books will eventually be completely replaced by e-books?" },
+                    { id: "P3_Book_2", part: "Part 3: Literature & Culture", text: "Why is it important for parents to read stories aloud to young children?" },
+                    { id: "P3_Book_3", part: "Part 3: Literature & Culture", text: "Should school systems encourage reading for entertainment rather than strictly for testing?" }
+                ]
+            }
+        ];
+
+        let examData = [];
+
+        function getRandomElements(arr, num) {
+            let shuffled = [...arr].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, num);
+        }
+
+        function buildDynamicExam() {
+            examData = [];
+
+            // 1. Draw 3 random Part 1 Questions
+            const selectedPart1 = getRandomElements(part1Pool, 3);
+            examData.push(...selectedPart1);
+
+            // 2. Draw 1 random Part 2 Topic Block
+            const randomTheme = part2And3Pool[Math.floor(Math.random() * part2And3Pool.length)];
+            examData.push(randomTheme.part2);
+
+            // 3. Draw 3 random Part 3 Questions matching that Part 2 theme
+            const selectedPart3 = getRandomElements(randomTheme.part3, 3);
+            examData.push(...selectedPart3);
+        }
+
+        // =========================================================================
+        // 2. STATE AND EVENT LIFECYCLE VARIABLES
+        // =========================================================================
+        let currentIdx = 0;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let studentName = "Anonymous_Student";
+        let studentEmail = "Unknown_Email";
+        let studentPhone = "Unknown_Phone";
+        let recordedAnswers = {}; 
+        
+        let timerInterval = null;     
+        let secondsElapsed = 0;
+        
+        let globalTimerInterval = null; 
+        let totalSecondsLeft = 15 * 60;  
+
+        // UI Mappings
+        const setupScreen = document.getElementById('setup-screen');
+        const testScreen = document.getElementById('test-screen');
+        const endScreen = document.getElementById('end-screen');
+        const btnStartTest = document.getElementById('btn-start-test');
+        const btnRecord = document.getElementById('btn-record');
+        const btnNext = document.getElementById('btn-next');
+        const btnNextText = document.getElementById('btn-next-text');
+        const btnReplay = document.getElementById('btn-replay');
+        const btnForceQuit = document.getElementById('btn-force-quit');
+        
+        const questionText = document.getElementById('question-text');
+        const partTag = document.getElementById('part-tag');
+        const progressText = document.getElementById('progress-text');
+        const timerDisplay = document.getElementById('timer-display');
+        const globalTimerDisplay = document.getElementById('global-timer');
+        const globalClockContainer = document.getElementById('global-clock-container');
+        const statusText = document.getElementById('status-text');
+        const statusDot = document.getElementById('status-dot');
+        const pulseRing = document.getElementById('pulse-ring');
+        const iconMic = document.getElementById('icon-mic');
+        const iconStop = document.getElementById('icon-stop');
+
+        function speakQuestion(text) {
+            window.speechSynthesis.cancel(); 
+            const cleanSpeechText = text.split("\n\nYou should say:")[0];
+            
+            const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
+            utterance.lang = 'en-GB'; 
+            utterance.rate = 0.92;    
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // =========================================================================
+        // 4. MANUAL FORM REGISTRATION & GLOBAL COUNTDOWN START
+        // =========================================================================
+        btnStartTest.addEventListener('click', async () => {
+            const nameInput = document.getElementById('student-name').value.trim();
+            const emailInput = document.getElementById('student-email').value.trim();
+            const phoneInput = document.getElementById('student-phone').value.trim();
+
+            if(!nameInput || !emailInput || !phoneInput) { 
+                alert("Please complete all fields to register your test session."); 
+                return; 
+            }
+
+            studentName = nameInput.replace(/[^a-zA-Z0-9]/g, "_"); 
+            studentEmail = emailInput;
+            studentPhone = phoneInput.replace(/[^a-zA-Z0-9+]/g, "_");
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    recordedAnswers[examData[currentIdx].id] = audioBlob;
+                    enableNextButton();
+                };
+
+                buildDynamicExam();
+
+                setupScreen.classList.add('hidden');
+                testScreen.classList.remove('hidden');
+                globalClockContainer.classList.remove('hidden');
+                
+                startGlobalTimer(); 
+                loadQuestion(0);
+            } catch (err) {
+                alert("Microphone hardware access denied. Check your browser security settings.");
+            }
+        });
+
+        // =========================================================================
+        // 5. APPLICATION DISPLAY, RECORDING, AND TIME LIMIT LOGIC
+        // =========================================================================
+        function startGlobalTimer() {
+            globalTimerInterval = setInterval(() => {
+                totalSecondsLeft--;
+                
+                const mins = String(Math.floor(totalSecondsLeft / 60)).padStart(2, '0');
+                const secs = String(totalSecondsLeft % 60).padStart(2, '0');
+                globalTimerDisplay.innerText = `${mins}:${secs}`;
+
+                if (totalSecondsLeft <= 0) {
+                    clearInterval(globalTimerInterval);
+                    document.getElementById('end-screen-message').innerText = "Time limit reached (15 minutes). All completed responses have been compiled.";
+                    forceStopAndUpload();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion(index) {
+            currentIdx = index;
+            audioChunks = [];
+            disableNextButton();
+            resetTimer();
+
+            const q = examData[index];
+            partTag.innerText = q.part;
+            questionText.innerHTML = q.text.replace(/\n/g, "<br>");
+            
+            progressText.innerText = `Question ${index + 1} of ${examData.length}`;
+            btnNextText.innerText = (index === examData.length - 1) ? "Finish Test & Save to Drive" : "Next Question";
+            
+            setTimeout(() => { speakQuestion(q.text); }, 600);
+        }
+
+        btnReplay.addEventListener('click', () => speakQuestion(examData[currentIdx].text));
+
+        btnRecord.addEventListener('click', () => {
+            if (mediaRecorder.state === "inactive") {
+                audioChunks = []; window.speechSynthesis.cancel();
+                mediaRecorder.start(); startTimer();
+                btnRecord.className = "bg-red-600 hover:bg-red-700 text-white w-20 h-20 rounded-full flex items-center justify-center shadow-lg transform scale-105 z-10 focus:outline-none";
+                iconMic.classList.add('hidden'); iconStop.classList.remove('hidden'); pulseRing.classList.remove('hidden'); timerDisplay.classList.remove('hidden');
+                statusText.innerText = "Recording Active..."; statusDot.className = "w-2.5 h-2.5 bg-red-500 rounded-full";
+            } else {
+                mediaRecorder.stop(); stopTimer();
+                btnRecord.className = "bg-gray-800 hover:bg-black text-white w-20 h-20 rounded-full flex items-center justify-center shadow-lg z-10 focus:outline-none";
+                iconStop.classList.add('hidden'); iconMic.classList.remove('hidden'); pulseRing.classList.add('hidden');
+                statusText.innerText = "Response Processed"; statusDot.className = "w-2.5 h-2.5 bg-green-500 rounded-full";
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (currentIdx < examData.length - 1) {
+                loadQuestion(currentIdx + 1);
+            } else {
+                clearInterval(globalTimerInterval);
+                finishExamSequence();
+            }
+        });
+
+        btnForceQuit.addEventListener('click', () => {
+            if(confirm("Are you sure you want to stop the test early? All answers recorded up to this point will be sent to your instructor.")) {
+                clearInterval(globalTimerInterval);
+                document.getElementById('end-screen-message').innerText = "Test ended early by student choice. Completed responses saved.";
+                forceStopAndUpload();
+            }
+        });
+
+        function forceStopAndUpload() {
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    recordedAnswers[examData[currentIdx].id] = audioBlob;
+                    finishExamSequence();
+                };
+                mediaRecorder.stop();
+                stopTimer();
+            } else {
+                finishExamSequence();
+            }
+        }
+
+        function finishExamSequence() {
+            window.speechSynthesis.cancel();
+            testScreen.classList.add('hidden');
+            globalClockContainer.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            progressText.innerText = "Processing Cloud Sync";
+            uploadAllAnswersToCloud();
+        }
+
+        async function uploadAllAnswersToCloud() {
+            try {
+                if (Object.keys(recordedAnswers).length === 0) {
+                    document.getElementById('sync-loading').classList.add('hidden');
+                    document.getElementById('sync-success').classList.remove('hidden');
+                    document.getElementById('end-screen-message').innerText = "No recordings were captured to save.";
+                    progressText.innerText = "Exam Closed";
+                    return;
+                }
+
+                for (const questionId in recordedAnswers) {
+                    const blob = recordedAnswers[questionId];
+                    const base64Data = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                        reader.readAsDataURL(blob);
+                    });
+
+                    const payload = {
+                        student: studentName,
+                        email: studentEmail,
+                        phone: studentPhone,
+                        fileName: `${studentName}_${questionId}.webm`,
+                        audioData: base64Data
+                    };
+
+                    await fetch(WEB_APP_URL, {
+                        method: "POST",
+                        mode: "no-cors", 
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                }
+                
+                document.getElementById('sync-loading').classList.add('hidden');
+                document.getElementById('sync-success').classList.remove('hidden');
+                progressText.innerText = "All Files Saved";
+
+            } catch (err) {
+                alert("Network storage upload glitch encountered.");
+                console.error(err);
+            }
+        }
+
+        function enableNextButton() { btnNext.disabled = false; btnNext.className = "bg-blue-600 text-white hover:bg-blue-700 font-semibold px-6 py-2.5 rounded-xl transition-all"; }
+        function disableNextButton() { btnNext.disabled = true; btnNext.className = "bg-gray-200 text-gray-400 font-semibold px-6 py-2.5 rounded-xl cursor-not-allowed"; statusText.innerText = "Microphone Standby"; statusDot.className="w-2.5 h-2.5 bg-gray-400 rounded-full"; }
+        function startTimer() { secondsElapsed = 0; timerInterval = setInterval(() => { secondsElapsed++; const m = String(Math.floor(secondsElapsed/60)).padStart(2,'0'); const s = String(secondsElapsed%60).padStart(2,'0'); timerDisplay.innerText = `${m}:${s}`; }, 1000); }
+        function stopTimer() { clearInterval(timerInterval); }
+        function resetTimer() { clearInterval(timerInterval); timerDisplay.classList.add('hidden'); timerDisplay.innerText = "00:00"; }
+    </script>
+</body>
+</html>
